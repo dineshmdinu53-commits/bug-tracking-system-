@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Redirecting...</title>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const bugId = params.get('id') || params.get('bug_id');
+        window.location.replace('admin/assign_bug.php' + (bugId ? '?id=' + encodeURIComponent(bugId) : ''));
+    </script>
+</head>
+<body>
+    Redirecting to the assignment page...
+</body>
+</html>

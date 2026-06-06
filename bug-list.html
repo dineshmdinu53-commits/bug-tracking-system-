@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="js/script.js?v=5" defer></script>
+    <title>Bug Tracker - Bug List</title>
+    <link rel="icon" href="images/bug-logo.png" type="image/png" />
+</head>
+
+<body id="page-bug-list" class="bg-background-dark font-display text-slate-100 min-h-screen flex flex-col">
+    <!-- Top Navigation Bar -->
+    <nav class="border-b border-slate-800 bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-8">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-primary-gradient p-1.5 rounded-lg">
+                            <span class="material-symbols-outlined text-white text-[24px]"
+                                style="font-variation-settings: 'FILL' 1;">bug_report</span>
+                        </div>
+                        <span class="text-xl font-bold tracking-tight text-white hidden sm:block">Bug Tracker</span>
+                    </div>
+                    <div class="hidden md:flex items-center gap-8">
+                        <a class="text-slate-400 hover:text-white transition-colors py-5"
+                            href="dashboard.html">Dashboard</a>
+                        <a class="text-white font-semibold border-b-2 border-primary py-5" href="bug-list.html">Bugs</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative hidden sm:block">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+                        <input
+                            class="bg-slate-900 border-slate-700 text-xs rounded-full pl-9 pr-4 py-1.5 w-48 focus:ring-primary focus:border-primary"
+                            placeholder="Search..." type="text" />
+                    </div>
+                    <a class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+                        href="index.html">
+                        <span class="material-symbols-outlined">logout</span>
+                        <span class="font-medium text-sm hidden sm:block">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl mx-auto w-full p-4 md:p-6 space-y-6">
+        <!-- Tabs & Search -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <nav id="bug-tabs" class="flex border-b border-white/5 gap-8">
+                <a class="border-b-2 border-primary text-primary pb-3 text-sm font-bold flex items-center gap-2"
+                    href="#" data-tab="">
+                    All Bugs <span id="bug-total-count"
+                        class="bg-primary/20 text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+                </a>
+                <a class="border-b-2 border-transparent text-slate-400 hover:text-slate-200 pb-3 text-sm font-semibold transition-colors"
+                    href="#" data-tab="my">My Tasks</a>
+                <a class="border-b-2 border-transparent text-slate-400 hover:text-slate-200 pb-3 text-sm font-semibold transition-colors"
+                    href="#" data-tab="recent">Recent</a>
+            </nav>
+            <div class="relative flex-1 max-w-sm">
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-[20px]">search</span>
+                <input id="bug-search"
+                    class="w-full bg-slate-800/50 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-primary focus:border-primary text-white placeholder:text-slate-500 transition-all"
+                    placeholder="Search bugs by ID or title..." type="text" />
+            </div>
+        </div>
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-3">
+            <button id="filter-status"
+                class="flex h-10 items-center justify-center gap-x-2 rounded-xl bg-slate-800/50 border border-white/10 px-4 hover:bg-slate-700/50 transition-all">
+                <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Status</span>
+                <span class="filter-value text-slate-100 text-sm font-bold">All</span>
+                <span class="material-symbols-outlined text-slate-500 text-[18px]">expand_more</span>
+            </button>
+            <button id="filter-priority"
+                class="flex h-10 items-center justify-center gap-x-2 rounded-xl bg-slate-800/50 border border-white/10 px-4 hover:bg-slate-700/50 transition-all">
+                <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Priority</span>
+                <span class="filter-value text-slate-100 text-sm font-bold">All</span>
+                <span class="material-symbols-outlined text-slate-500 text-[18px]">expand_more</span>
+            </button>
+            <button id="clear-filters"
+                class="ml-auto text-primary text-sm font-bold hover:text-accent-orange transition-colors px-2">Clear
+                filters</button>
+        </div>
+        <!-- Table View -->
+        <div class="glossy-card border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-black/20 border-b border-white/5">
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bug ID
+                            </th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Title
+                            </th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                Priority</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status
+                            </th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                Assignee</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Created
+                            </th>
+                            <th class="px-6 py-5"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bug-list-tbody" class="divide-y divide-white/5">
+                        <tr>
+                            <td colspan="7" class="px-6 py-12 text-center text-slate-500 text-sm">Loading bugs...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-5 bg-black/30 border-t border-white/5 flex items-center justify-between">
+                <span id="results-info"
+                    class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Loading...</span>
+                <div id="pagination-controls" class="flex items-center gap-2"></div>
+            </div>
+        </div>
+    </main>
+    <!-- Bottom Navigation Bar (Mobile) -->
+    <div
+        class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 px-6 py-4 flex justify-around items-center z-50">
+        <a class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary transition-colors"
+            href="dashboard.html">
+            <span class="material-symbols-outlined">grid_view</span>
+            <span class="text-[10px] font-bold">Dashboard</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary transition-colors"
+            href="create-bug.html">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="text-[10px] font-bold">Create</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-primary" href="bug-list.html">
+            <span class="material-symbols-outlined">pest_control</span>
+            <span class="text-[10px] font-bold">Bugs</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary transition-colors"
+            href="bug-report.html">
+            <span class="material-symbols-outlined">analytics</span>
+            <span class="text-[10px] font-bold">Reports</span>
+        </a>
+    </div>
+</body>
+
+</html>
